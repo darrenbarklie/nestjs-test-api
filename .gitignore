@@ -1,5 +1,8 @@
 # dotenv
 .env
+.env.staging
+.env.development
+.env.development.local
 
 # compiled output
 /dist

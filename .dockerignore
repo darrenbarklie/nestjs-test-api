@@ -1,4 +1,7 @@
 node_modules
 npm-debug.log
 .env
+.env.staging
+.env.development
+.env.development.local
 cloud_sql_proxy

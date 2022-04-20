@@ -1,51 +1,43 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import databaseConfig from './config/database.config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+// import { UsersModule } from './users/users.module';
 
 console.log(`ENV: process.env.${process.env.NODE_ENV}`);
 
-let environmentConfig: object;
-
-if (process.env.NODE_ENV === 'development') {
-  environmentConfig = {
-    type: 'postgres',
-    host: process.env.DEVELOPMENT_DATABASE_HOST, // Proxy
-    port: +process.env.DEVELOPMENT_DATABASE_PORT, // Proxy
-    database: process.env.DEVELOPMENT_DATABASE_NAME,
-    username: process.env.DEVELOPMENT_DATABASE_USER,
-    password: process.env.DEVELOPMENT_DATABASE_PASSWORD,
-    entities: ['dist/**/*.entity.js'],
-    autoLoadEntities: true,
-    // IMPORTANT: disable synchronize setting in Production
-    synchronize: true,
-  };
-} else if (process.env.NODE_ENV === 'staging') {
-  environmentConfig = {
-    type: 'postgres',
-    host: process.env.STAGING_DATABASE_HOST,
-    extra: {
-      socketPath: process.env.STAGING_DATABASE_SOCKET,
-    },
-    database: 'postgres',
-    username: 'postgres',
-    password: '109876543210',
-    entities: ['dist/**/*.entity.js'],
-    autoLoadEntities: true,
-    // IMPORTANT: disable synchronize setting in Production
-    synchronize: true,
-  };
-} else {
-  // Should error
-  environmentConfig = {};
-}
-
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      useFactory: () => environmentConfig,
+    // Must be declared first
+    ConfigModule.forRoot({
+      envFilePath: ['.env.development.local'],
+      load: [databaseConfig],
+      isGlobal: true,
+      cache: true,
     }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DATABASE_HOST,
+      ...(process.env.NODE_ENV === 'development' && {
+        port: Number(process.env.DATABASE_PORT),
+      }),
+      ...(process.env.NODE_ENV === ('staging' || 'production') && {
+        extra: {
+          socketPath: process.env.DATABASE_SOCKET,
+        },
+      }),
+      database: process.env.DATABASE_NAME,
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      entities: ['dist/**/*.entity.js'],
+      autoLoadEntities: true,
+      // IMPORTANT: Disable synchronize setting in Production
+      synchronize: Boolean(process.env.DATABASE_PASSWORD),
+    }),
+    // UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

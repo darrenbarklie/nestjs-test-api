@@ -20,15 +20,11 @@ chmod +x cloud_sql_proxy
 # Run local dev instance with hot reload, port 3000
 npm run start:dev
 
-# Build container (on Mac M1, targeting AMD 64)
-docker buildx build --platform linux/amd64 -t nestjs-test-api:v0.1.0 .
-
-# Build container with environment varaiable
-# docker buildx build --platform linux/amd64 --build-arg buildtime_variable=new_value -t nestjs-test-api:v0.2.0 .
-docker buildx build --platform linux/amd64 -t nestjs-test-api:v0.2.0 .
+# Build container (on Mac M1, targeting AMD64)
+docker buildx build --platform linux/amd64 -t nestjs-test-api:v0.3.0 .
 
 # Run local container, port 3000
-docker run -it --env NODE_ENV=staging -p 3000:3000 nestjs-test-api:v0.2.0
+docker run -it --env NODE_ENV=staging -p 3000:3000 nestjs-test-api:v0.3.0
 
 ```
 
@@ -37,10 +33,10 @@ docker run -it --env NODE_ENV=staging -p 3000:3000 nestjs-test-api:v0.2.0
 ```bash
 
 # Tag for GCP Artifact Registry
-docker tag nestjs-test-api:v0.2.0 europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.2.0
+docker tag nestjs-test-api:v0.3.0 europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.3.0
 
 # Push to GCP Artifact Registry
-docker push europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.2.0
+docker push europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.3.0
 
 ```
 
@@ -56,7 +52,12 @@ npm install @nestjs/typeorm typeorm pg
 
 # Run Cloud SQL Proxy, connect hosted Cloud SQL, via localhost:1234
 # Note: Must be signed in on gcloud CLI
+# Note: Scripted to `npm run proxy`
 ./cloud_sql_proxy -instances=cloudpayroll-dev:europe-west2:nestjs-test-db=tcp:0.0.0.0:1234
+
+# Configure use of dotenv
+npm i --save @nestjs/config
+
 ```
 
 ## Misc
