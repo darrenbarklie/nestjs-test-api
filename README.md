@@ -23,8 +23,12 @@ npm run start:dev
 # Build container (on Mac M1, targeting AMD 64)
 docker buildx build --platform linux/amd64 -t nestjs-test-api:v0.1.0 .
 
+# Build container with environment varaiable
+# docker buildx build --platform linux/amd64 --build-arg buildtime_variable=new_value -t nestjs-test-api:v0.2.0 .
+docker buildx build --platform linux/amd64 -t nestjs-test-api:v0.2.0 .
+
 # Run local container, port 3000
-docker run -it -p 3000:3000 nestjs-test-api:v0.1.0
+docker run -it --env NODE_ENV=staging -p 3000:3000 nestjs-test-api:v0.2.0
 
 ```
 
@@ -33,9 +37,28 @@ docker run -it -p 3000:3000 nestjs-test-api:v0.1.0
 ```bash
 
 # Tag for GCP Artifact Registry
-docker tag nestjs-test-api:v0.1.0 europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.1.0
+docker tag nestjs-test-api:v0.2.0 europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.2.0
 
 # Push to GCP Artifact Registry
-docker push europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.1.0
+docker push europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.2.0
 
 ```
+
+## Database Connection
+
+### Local
+
+For local development, run through the Cloud SQL Proxy secure tunnel. Note that you must be signed in on [gcloud CLI](https://cloud.google.com/sdk/gcloud).
+
+```bash
+# Install TypeORM bindings for PostgreSQL
+npm install @nestjs/typeorm typeorm pg
+
+# Run Cloud SQL Proxy, connect hosted Cloud SQL, via localhost:1234
+# Note: Must be signed in on gcloud CLI
+./cloud_sql_proxy -instances=cloudpayroll-dev:europe-west2:nestjs-test-db=tcp:0.0.0.0:1234
+```
+
+## Misc
+
+Use cross-env to standardise use of env vars across Unix, macOS, Windows. Install with `npm install cross-env`
