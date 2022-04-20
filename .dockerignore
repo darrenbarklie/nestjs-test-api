@@ -1,0 +1,4 @@
+node_modules
+npm-debug.log
+.env
+cloud_sql_proxy
