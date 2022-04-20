@@ -21,10 +21,10 @@ chmod +x cloud_sql_proxy
 npm run start:dev
 
 # Build container (on Mac M1, targeting AMD64)
-docker buildx build --platform linux/amd64 -t nestjs-test-api:v0.3.0 .
+docker buildx build --platform linux/amd64 -t nestjs-test-api:v0.4.0 .
 
 # Run local container, port 3000
-docker run -it --env NODE_ENV=staging -p 3000:3000 nestjs-test-api:v0.3.0
+docker run -it --env NODE_ENV=staging -p 3000:3000 nestjs-test-api:v0.4.0
 
 ```
 
@@ -33,10 +33,10 @@ docker run -it --env NODE_ENV=staging -p 3000:3000 nestjs-test-api:v0.3.0
 ```bash
 
 # Tag for GCP Artifact Registry
-docker tag nestjs-test-api:v0.3.0 europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.3.0
+docker tag nestjs-test-api:v0.4.0 europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.4.0
 
 # Push to GCP Artifact Registry
-docker push europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.3.0
+docker push europe-west2-docker.pkg.dev/cloudpayroll-dev/nestjs-test/nestjs-test-api:v0.4.0
 
 ```
 

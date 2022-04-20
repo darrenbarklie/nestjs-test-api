@@ -5,7 +5,7 @@ import databaseConfig from './config/database.config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-// import { UsersModule } from './users/users.module';
+import { UsersModule } from './users/users.module';
 
 console.log(`ENV: process.env.${process.env.NODE_ENV}`);
 
@@ -37,7 +37,7 @@ console.log(`ENV: process.env.${process.env.NODE_ENV}`);
       // IMPORTANT: Disable synchronize setting in Production
       synchronize: Boolean(process.env.DATABASE_PASSWORD),
     }),
-    // UsersModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
