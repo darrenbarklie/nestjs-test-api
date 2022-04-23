@@ -22,6 +22,7 @@
     "proxy": "./cloud_sql_proxy -instances=cloudpayroll-dev:europe-west2:nestjs-test-db=tcp:0.0.0.0:1234"
   },
   "dependencies": {
+    "@google-cloud/secret-manager": "^3.12.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.0.0",
     "@nestjs/core": "^8.0.0",

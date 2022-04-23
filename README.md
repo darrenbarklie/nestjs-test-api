@@ -63,3 +63,8 @@ npm i --save @nestjs/config
 ## Misc
 
 Use cross-env to standardise use of env vars across Unix, macOS, Windows. Install with `npm install cross-env`
+
+## Todo
+
+- Integrate Google Secret Manager
+- Blog Post
